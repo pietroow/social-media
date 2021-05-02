@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_USER: framework
       POSTGRES_PASSWORD: framework
-      POSTGRES_DB: social-media
+      POSTGRES_DB: social_media
 
 volumes:
   db_data:
