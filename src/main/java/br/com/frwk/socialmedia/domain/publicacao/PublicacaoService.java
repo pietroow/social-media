@@ -31,27 +31,9 @@ public class PublicacaoService {
         return publicacaoRepository.save(publicacao);
     }
 
-    public void uploadImage(UUID publicacaoId, MultipartFile file, UUID id) {
-        Usuario usuario = usuarioRepository.findById(id);
-        Publicacao publicacao = publicacaoRepository.findById(publicacaoId);
 
-        try {
-            byte[] bytes = file.getBytes();
-            Imagem imagem = new Imagem(bytes, usuario);
-            publicacao.adicionarImagem(imagem);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        publicacaoRepository.save(publicacao);
-    }
 
-    public void adicionarComentario(UUID publicacaoId, String comentario, UUID usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
-        Publicacao publicacao = publicacaoRepository.findById(publicacaoId);
-        Comentario novoComentario = new Comentario(comentario, usuario);
-        publicacao.adicionarComentario(novoComentario);
-    }
 
     public List<PublicacaoListaDTO> findAllPublicacoesByUsuario(UUID usuarioId) {
         List<Publicacao> publicacoes = publicacaoRepository.findByUsuarioId(usuarioId);

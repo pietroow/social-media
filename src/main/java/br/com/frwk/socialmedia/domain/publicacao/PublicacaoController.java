@@ -14,6 +14,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+import static br.com.frwk.socialmedia.ConstanteUsuario.USUARIO_ID;
+
 @Slf4j
 @RestController
 @RequestMapping("/publicacao")
@@ -21,8 +23,6 @@ import java.util.UUID;
 public class PublicacaoController {
 
     private final PublicacaoService publicacaoService;
-
-    public static final UUID USUARIO_ID = UUID.fromString("f9196784-68c2-4c77-925f-697736bfa4be");
 
     @PostMapping
     public ResponseEntity<Publicacao> criarPublicacao(@Valid @RequestBody CriarPublicacaoDTO criarPublicacaoDTO) {
@@ -33,18 +33,6 @@ public class PublicacaoController {
                 .toUri();
         log.info("Criado novo cliente com id: {}", publicacao.getId());
         return ResponseEntity.created(location).build();
-    }
-
-    @PostMapping("/adicionar-imagem/{publicacaoId}")
-    public void uploadImage(@PathVariable("publicacaoId") UUID publicacaoId,
-                            @RequestParam MultipartFile file) {
-        publicacaoService.uploadImage(publicacaoId, file, USUARIO_ID);
-    }
-
-    @PostMapping("/adicionar-comentario/{publicacaoId}")
-    public void adicionarComentario(@PathVariable("publicacaoId") UUID publicacaoId,
-                                    @RequestBody String comentario) {
-        publicacaoService.adicionarComentario(publicacaoId, comentario, USUARIO_ID);
     }
 
     @GetMapping("/{usuarioId}")
