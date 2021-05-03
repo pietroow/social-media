@@ -1,7 +1,9 @@
-package br.com.frwk.socialmedia.domain;
+package br.com.frwk.socialmedia.domain.comentario;
 
+import br.com.frwk.socialmedia.domain.usuario.Usuario;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Table(name = "tb_comentario", schema = "social_media")
 @Where(clause = "deleted_at IS NULL")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class Comentario {
 
     @Id
@@ -25,9 +28,6 @@ public class Comentario {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario criador;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Publicacao publicacao;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -40,8 +40,14 @@ public class Comentario {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public Comentario() {
+    public Comentario(String texto, Usuario criador) {
         this.id = UUID.randomUUID();
+        this.texto = texto;
+        this.criador = criador;
+    }
+
+    public UUID getIdCriador() {
+        return criador.getId();
     }
 
     @Override
@@ -50,7 +56,6 @@ public class Comentario {
                 "id=" + id +
                 ", texto='" + texto + '\'' +
                 ", criador=" + criador +
-                ", publicacao=" + publicacao +
                 '}';
     }
 
