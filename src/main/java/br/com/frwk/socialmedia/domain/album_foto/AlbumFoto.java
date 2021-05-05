@@ -1,6 +1,6 @@
-package br.com.frwk.socialmedia.domain.comentario;
+package br.com.frwk.socialmedia.domain.album_foto;
 
-import br.com.frwk.socialmedia.domain.publicacao.Publicacao;
+import br.com.frwk.socialmedia.domain.imagem.Imagem;
 import br.com.frwk.socialmedia.domain.usuario.Usuario;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,27 +11,30 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Entity
-@Table(name = "tb_comentario", schema = "social_media")
+@Table(name = "tb_album_foto", schema = "social_media")
 @Where(clause = "deleted_at IS NULL")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-public class Comentario {
+public class AlbumFoto {
 
     @Id
     @EqualsAndHashCode.Include
     private UUID id;
 
-    private String texto;
+    private String titulo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario criador;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Publicacao publicacao;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "tb_album_foto_imagem", joinColumns = @JoinColumn(name = "album_foto_id"),
+            inverseJoinColumns = @JoinColumn(name = "imagem_id"), schema = "social_media")
+    private Set<Imagem> imagens;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -44,27 +47,18 @@ public class Comentario {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public Comentario(String texto, Usuario criador) {
+    public AlbumFoto(CriarAlbumFotoDTO criarAlbumFotoDTO, Usuario criador) {
         this.id = UUID.randomUUID();
-        this.texto = texto;
+        this.titulo = criarAlbumFotoDTO.getTitulo();
         this.criador = criador;
+    }
+
+    public void adicionarImagem(Imagem imagem) {
+        this.imagens.add(imagem);
     }
 
     public void excluir() {
         this.deletedAt = LocalDateTime.now();
-    }
-
-    public UUID getIdCriador() {
-        return criador.getId();
-    }
-
-    @Override
-    public String toString() {
-        return "Comentario{" +
-                "id=" + id +
-                ", texto='" + texto + '\'' +
-                ", criador=" + criador +
-                '}';
     }
 
 }

@@ -22,16 +22,12 @@ CREATE TABLE social_media.tb_comentario (
 	id UUID PRIMARY KEY,
 	texto VARCHAR(100) NOT NULL,
 	criador_id UUID NOT NULL,
+	publicacao_id UUID NOT NULL,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
 	deleted_at TIMESTAMP,
-	FOREIGN KEY (criador_id) REFERENCES tb_usuario(id)
-);
-
-CREATE TABLE social_media.tb_publicacao_comentario (
-    publicacao_id UUID NOT NULL,
-    comentario_id UUID NOT NULL,
-    PRIMARY KEY (publicacao_id, comentario_id)
+	FOREIGN KEY (criador_id) REFERENCES tb_usuario(id),
+	FOREIGN KEY (publicacao_id) REFERENCES tb_publicacao(id)
 );
 
 CREATE TABLE social_media.tb_imagem (
@@ -44,13 +40,17 @@ CREATE TABLE social_media.tb_imagem (
 CREATE TABLE social_media.tb_publicacao_imagem (
     publicacao_id UUID NOT NULL,
     imagem_id UUID NOT NULL,
-    PRIMARY KEY (publicacao_id, imagem_id)
+    PRIMARY KEY (publicacao_id, imagem_id),
+    FOREIGN KEY (publicacao_id) REFERENCES tb_publicacao(id),
+    FOREIGN KEY (imagem_id) REFERENCES tb_imagem(id)
 );
 
 CREATE TABLE social_media.tb_album_foto (
 	id UUID PRIMARY KEY,
+	titulo VARCHAR,
 	criador_id UUID NOT NULL,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
-	deleted_at TIMESTAMP
+	deleted_at TIMESTAMP,
+	FOREIGN KEY (criador_id) REFERENCES tb_usuario(id)
 );
