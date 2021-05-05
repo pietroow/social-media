@@ -22,4 +22,9 @@ public class ComentarioController {
         comentarioService.adicionarComentario(publicacaoId, comentario, USUARIO_ID);
     }
 
+    @DeleteMapping("/remover/{publicacaoId}")
+    public void removerComentario(@RequestParam UUID comentarioId) {
+        comentarioService.removerComentario(comentarioId, USUARIO_ID);
+    }
+
 }

@@ -33,9 +33,7 @@ public class Publicacao {
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario criador;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "tb_publicacao_comentario", joinColumns = @JoinColumn(name = "publicacao_id"),
-            inverseJoinColumns = @JoinColumn(name = "comentario_id"), schema = "social_media")
+    @OneToMany(mappedBy = "publicacao", cascade = CascadeType.ALL)
     private Set<Comentario> comentarios;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -61,6 +59,7 @@ public class Publicacao {
     }
 
     public void excluir() {
+        comentarios.forEach(Comentario::excluir);
         this.deletedAt = LocalDateTime.now();
     }
 

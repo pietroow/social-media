@@ -1,5 +1,7 @@
 package br.com.frwk.socialmedia.domain.imagem;
 
+import br.com.frwk.socialmedia.domain.album_foto.AlbumFoto;
+import br.com.frwk.socialmedia.domain.album_foto.repository.AlbumFotoRepository;
 import br.com.frwk.socialmedia.domain.publicacao.Publicacao;
 import br.com.frwk.socialmedia.domain.publicacao.repository.PublicacaoRepository;
 import br.com.frwk.socialmedia.domain.usuario.Usuario;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImagemService {
 
+    private final AlbumFotoRepository albumFotoRepository;
     private final PublicacaoRepository publicacaoRepository;
     private final UsuarioRepository usuarioRepository;
 
@@ -33,6 +36,21 @@ public class ImagemService {
         }
 
         publicacaoRepository.save(publicacao);
+    }
+
+    public void uploadImageAlbumFoto(UUID albumId, MultipartFile file, UUID usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId);
+        AlbumFoto albumFoto = albumFotoRepository.findById(albumId);
+
+        try {
+            byte[] bytes = file.getBytes();
+            Imagem imagem = new Imagem(bytes, usuario);
+            albumFoto.adicionarImagem(imagem);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        albumFotoRepository.save(albumFoto);
     }
 
 }

@@ -17,10 +17,16 @@ public class ImagemController {
 
     private ImagemService imagemService;
 
-    @PostMapping("/adicionar-imagem/{publicacaoId}")
-    public void adicionarImagem(@PathVariable("publicacaoId") UUID publicacaoId,
-                                @RequestParam MultipartFile file) {
+    @PostMapping("/adicionar-imagem/publicacao/{publicacaoId}")
+    public void adicionarImagemPublicacao(@PathVariable("publicacaoId") UUID publicacaoId,
+                                          @RequestParam MultipartFile file) {
         imagemService.uploadImage(publicacaoId, file, USUARIO_ID);
+    }
+
+    @PostMapping("/adicionar-imagem/album-foto/{albumId}")
+    public void adicionarImagemAlbum(@PathVariable("albumId") UUID albumId,
+                                     @RequestParam MultipartFile file) {
+        imagemService.uploadImageAlbumFoto(albumId, file, USUARIO_ID);
     }
 
 }
