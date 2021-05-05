@@ -2,7 +2,6 @@ package br.com.frwk.socialmedia.domain.album_foto;
 
 import br.com.frwk.socialmedia.domain.publicacao.Publicacao;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 import static br.com.frwk.socialmedia.ConstanteUsuario.USUARIO_ID;
 
-@Slf4j
 @RestController
 @RequestMapping("/album-fotos")
 @RequiredArgsConstructor

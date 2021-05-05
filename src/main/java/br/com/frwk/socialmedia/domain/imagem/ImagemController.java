@@ -1,7 +1,6 @@
 package br.com.frwk.socialmedia.domain.imagem;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +8,6 @@ import java.util.UUID;
 
 import static br.com.frwk.socialmedia.ConstanteUsuario.USUARIO_ID;
 
-@Slf4j
 @RestController
 @RequestMapping("/imagens")
 @RequiredArgsConstructor

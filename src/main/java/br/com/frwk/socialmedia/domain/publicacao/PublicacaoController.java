@@ -3,7 +3,6 @@ package br.com.frwk.socialmedia.domain.publicacao;
 import br.com.frwk.socialmedia.domain.publicacao.dto.CriarPublicacaoDTO;
 import br.com.frwk.socialmedia.domain.publicacao.dto.PublicacaoListaDTO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,7 +14,6 @@ import java.util.UUID;
 
 import static br.com.frwk.socialmedia.ConstanteUsuario.USUARIO_ID;
 
-@Slf4j
 @RestController
 @RequestMapping("/publicacao")
 @RequiredArgsConstructor
@@ -30,7 +28,6 @@ public class PublicacaoController {
                 .path("/{id}")
                 .buildAndExpand(publicacao.getId())
                 .toUri();
-        log.info("Criado novo cliente com id: {}", publicacao.getId());
         return ResponseEntity.created(location).build();
     }
 

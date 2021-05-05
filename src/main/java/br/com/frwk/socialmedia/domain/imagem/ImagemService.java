@@ -26,31 +26,26 @@ public class ImagemService {
     public void uploadImage(UUID publicacaoId, MultipartFile file, UUID id) {
         Usuario usuario = usuarioRepository.findById(id);
         Publicacao publicacao = publicacaoRepository.findById(publicacaoId);
-
-        try {
-            byte[] bytes = file.getBytes();
-            Imagem imagem = new Imagem(bytes, usuario);
-            publicacao.adicionarImagem(imagem);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        Imagem imagem = getImagem(file, usuario);
+        publicacao.adicionarImagem(imagem);
         publicacaoRepository.save(publicacao);
     }
 
     public void uploadImageAlbumFoto(UUID albumId, MultipartFile file, UUID usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId);
         AlbumFoto albumFoto = albumFotoRepository.findById(albumId);
+        Imagem imagem = getImagem(file, usuario);
+        albumFoto.adicionarImagem(imagem);
+        albumFotoRepository.save(albumFoto);
+    }
 
+    private Imagem getImagem(MultipartFile file, Usuario usuario) {
         try {
             byte[] bytes = file.getBytes();
-            Imagem imagem = new Imagem(bytes, usuario);
-            albumFoto.adicionarImagem(imagem);
+            return new Imagem(bytes, usuario);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
-
-        albumFotoRepository.save(albumFoto);
     }
 
 }
