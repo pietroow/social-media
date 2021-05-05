@@ -40,7 +40,9 @@ CREATE TABLE social_media.tb_imagem (
 CREATE TABLE social_media.tb_publicacao_imagem (
     publicacao_id UUID NOT NULL,
     imagem_id UUID NOT NULL,
-    PRIMARY KEY (publicacao_id, imagem_id)
+    PRIMARY KEY (publicacao_id, imagem_id),
+    FOREIGN KEY (publicacao_id) REFERENCES tb_usuario(id),
+    FOREIGN KEY (imagem_id) REFERENCES tb_imagem(id)
 );
 
 CREATE TABLE social_media.tb_album_foto (
@@ -49,5 +51,6 @@ CREATE TABLE social_media.tb_album_foto (
 	criador_id UUID NOT NULL,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
-	deleted_at TIMESTAMP
+	deleted_at TIMESTAMP,
+	FOREIGN KEY (criador_id) REFERENCES tb_usuario(id)
 );
