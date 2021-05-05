@@ -41,7 +41,7 @@ CREATE TABLE social_media.tb_publicacao_imagem (
     publicacao_id UUID NOT NULL,
     imagem_id UUID NOT NULL,
     PRIMARY KEY (publicacao_id, imagem_id),
-    FOREIGN KEY (publicacao_id) REFERENCES tb_usuario(id),
+    FOREIGN KEY (publicacao_id) REFERENCES tb_publicacao(id),
     FOREIGN KEY (imagem_id) REFERENCES tb_imagem(id)
 );
 
