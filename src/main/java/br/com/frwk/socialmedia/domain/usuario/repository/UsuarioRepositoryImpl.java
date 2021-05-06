@@ -1,5 +1,6 @@
-package br.com.frwk.socialmedia.domain.usuario;
+package br.com.frwk.socialmedia.domain.usuario.repository;
 
+import br.com.frwk.socialmedia.domain.usuario.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,16 @@ class UsuarioRepositoryImpl implements UsuarioRepository {
     public Usuario findById(UUID usuarioId) {
         Optional<Usuario> usuarioOptional = usuarioRepositoryJPA.findById(usuarioId);
         return usuarioOptional.orElseThrow(() -> new EntityNotFoundException("USUÁRIO NÃO ENCONTRADO."));
+    }
+
+    @Override
+    public Usuario save(Usuario usuario) {
+        return usuarioRepositoryJPA.save(usuario);
+    }
+
+    @Override
+    public Optional<Usuario> findByEmailIgnoreCase(String email) {
+        return Optional.empty();
     }
 
 }

@@ -4,9 +4,10 @@ import br.com.frwk.socialmedia.domain.album_foto.AlbumFoto;
 import br.com.frwk.socialmedia.domain.album_foto.repository.AlbumFotoRepository;
 import br.com.frwk.socialmedia.domain.publicacao.Publicacao;
 import br.com.frwk.socialmedia.domain.publicacao.repository.PublicacaoRepository;
+import br.com.frwk.socialmedia.domain.usuario.BuscarUsuarioComponent;
 import br.com.frwk.socialmedia.domain.usuario.Usuario;
-import br.com.frwk.socialmedia.domain.usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,18 +22,18 @@ public class ImagemService {
 
     private final AlbumFotoRepository albumFotoRepository;
     private final PublicacaoRepository publicacaoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final BuscarUsuarioComponent buscarUsuarioComponent;
 
-    public void uploadImage(UUID publicacaoId, MultipartFile file, UUID id) {
-        Usuario usuario = usuarioRepository.findById(id);
+    public void uploadImage(UUID publicacaoId, MultipartFile file, Authentication authentication) {
+        Usuario usuario = buscarUsuarioComponent.getUsuario(authentication);
         Publicacao publicacao = publicacaoRepository.findById(publicacaoId);
         Imagem imagem = getImagem(file, usuario);
         publicacao.adicionarImagem(imagem);
         publicacaoRepository.save(publicacao);
     }
 
-    public void uploadImageAlbumFoto(UUID albumId, MultipartFile file, UUID usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+    public void uploadImageAlbumFoto(UUID albumId, MultipartFile file, Authentication authentication) {
+        Usuario usuario = buscarUsuarioComponent.getUsuario(authentication);
         AlbumFoto albumFoto = albumFotoRepository.findById(albumId);
         Imagem imagem = getImagem(file, usuario);
         albumFoto.adicionarImagem(imagem);

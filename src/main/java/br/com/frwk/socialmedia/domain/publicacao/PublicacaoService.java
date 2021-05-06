@@ -3,9 +3,10 @@ package br.com.frwk.socialmedia.domain.publicacao;
 import br.com.frwk.socialmedia.domain.publicacao.dto.CriarPublicacaoDTO;
 import br.com.frwk.socialmedia.domain.publicacao.dto.PublicacaoListaDTO;
 import br.com.frwk.socialmedia.domain.publicacao.repository.PublicacaoRepository;
+import br.com.frwk.socialmedia.domain.usuario.BuscarUsuarioComponent;
 import br.com.frwk.socialmedia.domain.usuario.Usuario;
-import br.com.frwk.socialmedia.domain.usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +20,10 @@ import java.util.stream.Collectors;
 public class PublicacaoService {
 
     private final PublicacaoRepository publicacaoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final BuscarUsuarioComponent buscarUsuarioComponent;
 
-    public Publicacao criarPublicacao(CriarPublicacaoDTO criarPublicacaoDTO, UUID usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+    public Publicacao criarPublicacao(CriarPublicacaoDTO criarPublicacaoDTO, Authentication authentication) {
+        Usuario usuario = buscarUsuarioComponent.getUsuario(authentication);
         Publicacao publicacao = new Publicacao(criarPublicacaoDTO, usuario);
         return publicacaoRepository.save(publicacao);
     }
@@ -34,8 +35,8 @@ public class PublicacaoService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteById(UUID publicacaoId, UUID usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+    public void deleteById(UUID publicacaoId, Authentication authentication) {
+        Usuario usuario = buscarUsuarioComponent.getUsuario(authentication);
         Publicacao publicacao = publicacaoRepository.findById(publicacaoId);
 
         if (!isUsuarioCriador(usuario, publicacao)) {

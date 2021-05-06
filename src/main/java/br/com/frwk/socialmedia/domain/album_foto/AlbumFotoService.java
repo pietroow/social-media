@@ -1,9 +1,10 @@
 package br.com.frwk.socialmedia.domain.album_foto;
 
 import br.com.frwk.socialmedia.domain.album_foto.repository.AlbumFotoRepository;
+import br.com.frwk.socialmedia.domain.usuario.BuscarUsuarioComponent;
 import br.com.frwk.socialmedia.domain.usuario.Usuario;
-import br.com.frwk.socialmedia.domain.usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,18 +15,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AlbumFotoService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final BuscarUsuarioComponent buscarUsuarioComponent;
     private final AlbumFotoRepository albumFotoRepository;
 
-    public AlbumFoto criarAlbumFoto(CriarAlbumFotoDTO criarAlbumFotoDTO, UUID usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+    public AlbumFoto criarAlbumFoto(CriarAlbumFotoDTO criarAlbumFotoDTO, Authentication authentication) {
+        Usuario usuario = buscarUsuarioComponent.getUsuario(authentication);
         AlbumFoto albumFoto = new AlbumFoto(criarAlbumFotoDTO, usuario);
         return albumFotoRepository.save(albumFoto);
     }
 
-    public void removerAlbumFoto(UUID albumId, UUID usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
-
+    public void removerAlbumFoto(UUID albumId, Authentication authentication) {
+        Usuario usuario = buscarUsuarioComponent.getUsuario(authentication);
         AlbumFoto albumFoto = albumFotoRepository.findById(albumId);
         Usuario criador = albumFoto.getCriador();
 
